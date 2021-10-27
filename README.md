@@ -9,7 +9,7 @@
 
 ## Setting up
 
-- Install NodeJS (version 14 or above)
+- Install NodeJS (version 14 or above) and Yarn (version 1.22)
 - Set up QRCode service (documentation coming soon)
 - Deploy the DHIS2 example instance using the database backup (DHIS2 version 2.35.8 or above)
 - Run the command `yarn install` in the root directory
