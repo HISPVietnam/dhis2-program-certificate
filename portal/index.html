@@ -356,7 +356,7 @@
         const docUrl = URL.createObjectURL(blob);
         $("#certificate-pdf").attr("src", docUrl);
       } else {
-        Swal.fire({
+        swal({
           icon: "error",
           title: "Person not found!",
           text: "Wrong SystemID or Phone number or person haven't complete the vaccinations"
