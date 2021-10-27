@@ -1,0 +1,427 @@
+<html>
+  <!-- CSS only -->
+  <!-- JavaScript Bundle with Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"
+  ></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+    crossorigin="anonymous"
+  />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/pdf-lib"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    }
+    .mainContainer {
+      padding: 0px;
+    }
+    .tab-content {
+      padding: 15px;
+    }
+    .input-field-generate-certificate-container {
+      align-items: center;
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: white;
+      /* min-height: calc(100vh - 65px); */
+    }
+    .button-generate-certificate {
+      text-align-last: center;
+      width: 100%;
+      padding: 15px;
+    }
+    .input-field-generate-certificate {
+      padding: 10px;
+      width: 100%;
+    }
+    .captcha-container {
+      text-align: center;
+      padding-top: 24px;
+    }
+    .captcha-container-box {
+      width: auto;
+      border: 1px solid rgb(189, 189, 189);
+      display: inline-flex;
+      padding: 24px;
+      border-radius: 4px;
+      flex-direction: column;
+    }
+
+    .verify-result-container {
+      text-align: center;
+      padding-top: 20px;
+    }
+
+    .verify-result-box {
+      width: auto;
+      border: 1px solid rgb(189, 189, 189);
+      display: inline-flex;
+      padding: 20px;
+      border-radius: 4px;
+      flex-direction: column;
+    }
+
+    .nav-tabs {
+      background-color: #2196f3;
+      height: 50px;
+    }
+
+    .nav-tabs > li > a {
+      border: medium none;
+      color: #fff;
+    }
+    .nav-tabs > li > a:hover {
+      background-color: #2196f3 !important;
+      border: medium none;
+      border-radius: 0;
+    }
+    .nav-link {
+      color: #fff;
+    }
+
+    .verify-button {
+      background: #5db85b;
+      background-image: -webkit-linear-gradient(top, #5db85b, #5db85b);
+      background-image: -moz-linear-gradient(top, #5db85b, #5db85b);
+      background-image: -ms-linear-gradient(top, #5db85b, #5db85b);
+      background-image: -o-linear-gradient(top, #5db85b, #5db85b);
+      background-image: linear-gradient(to bottom, #5db85b, #5db85b);
+      -webkit-border-radius: 10;
+      -moz-border-radius: 10;
+      border-radius: 10px;
+      border-color: #ffffff;
+      font-family: Georgia;
+      color: #ffffff;
+      font-size: 15px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+  </style>
+  <body>
+    <div class="mainContainer">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist" style="padding-left: 5px">
+          <button
+            class="nav-link active"
+            id="nav-generate-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-generate"
+            type="button"
+            role="tab"
+            aria-controls="nav-generate"
+            aria-selected="true"
+          >
+            Generate Certificate
+          </button>
+          <!-- <button
+            class="nav-link"
+            id="nav-verify-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-verify"
+            type="button"
+            role="tab"
+            aria-controls="nav-verify"
+            aria-selected="false"
+          >
+            Verify Certificate
+          </button> -->
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-generate" role="tabpanel" aria-labelledby="nav-generate-tab">
+          <h2 align="center">Generate Certificate</h2>
+          <div class="input-field-generate-certificate-container">
+            <div class="input-field-generate-certificate">
+              <input
+                class="form-control"
+                type="text"
+                id="systemId"
+                placeholder="System ID *"
+                aria-label="default input example"
+                oninput="checkMandatory()"
+              />
+            </div>
+            <div class="input-field-generate-certificate">
+              <input
+                class="form-control"
+                type="number"
+                id="phoneNumber"
+                placeholder="Phone Number *"
+                aria-label="default input example"
+                oninput="checkMandatory()"
+              />
+            </div>
+          </div>
+          <div class="captcha-container">
+            <div class="captcha-container-box" id="captchaBox">
+              <canvas id="captcha" width="100" height="25">captcha text</canvas>
+              <div style="padding-bottom: 5px">
+                <a id="reloadCaptcha" onclick="reloadCaptcha('captcha')" style="cursor: pointer; color: blue"
+                  >Reload Captcha</a
+                >
+              </div>
+              <div>
+                <input
+                  class="form-control"
+                  id="captchaTextBox"
+                  type="text"
+                  name="text"
+                  placeholder="Enter captcha value"
+                  oninput="onChangeCaptchaTextBox()"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="button-generate-certificate">
+            <button type="button" class="btn btn-primary" id="generateButton" onclick="submit()">GENERATE</button>
+          </div>
+          <div style="width: 100%; display: flex; align-items: center; justify-content: center">
+            <embed id="certificate-pdf" type="application/pdf" style="width: 1000px; height: 800px" />
+          </div>
+        </div>
+        <!-- <div class="tab-pane fade" id="nav-verify" role="tabpanel" aria-labelledby="nav-verify-tab">
+          <h2 align="center">Verify Certificate</h2>
+          <h5 align="center" style="padding-top: 25px">Scan Your Covid Certificate QR Code</h5>
+          <div class="captcha-container">
+            <div class="captcha-container-box" id="captchaBoxVerifyCertificate">
+              <canvas id="captchaVerifyCertificate" width="100" height="25">captcha text</canvas>
+              <div style="padding-bottom: 5px">
+                <a
+                  id="reloadCaptchaVerifyCertificate"
+                  onclick="reloadCaptcha('captchaVerifyCertificate')"
+                  style="cursor: pointer; color: blue"
+                  >Reload Captcha</a
+                >
+              </div>
+              <div>
+                <input
+                  class="form-control"
+                  id="captchaTextBoxVerifyCertificate"
+                  type="text"
+                  name="text"
+                  placeholder="Enter captcha value"
+                  oninput="onChangeCaptchaTextBoxVerifyCertificate()"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="button-generate-certificate">
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="generateButtonVerifyCertificate"
+              onclick="submitVerifyCertificate()"
+            >
+              SCAN
+            </button>
+          </div>
+          <div class="verify-result-container">
+            <div id="verifyResult" class="verify-result-box">
+              <button class="verify-button">&#10003; VERIFIED</button>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </body>
+  <script>
+    const PDFDocument = PDFLib.PDFDocument;
+    const PageSizes = PDFLib.PageSizes;
+    const degrees = PDFLib.degrees;
+    let captchaNumber = Math.floor(1000 + Math.random() * 9000);
+    let captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+    const init = () => {
+      //generateCertificate
+      pushTextToCanvas(captchaNumber, "captcha");
+      $("#generateButton")[0].disabled = true;
+      //verifyCertificate
+      //pushTextToCanvas(captchaNumberVerifyCertificate, "captchaVerifyCertificate");
+      //$("#generateButtonVerifyCertificate")[0].disabled = true;
+    };
+
+    const pushTextToCanvas = (value, canvasId) => {
+      let canvas = document.getElementById(canvasId);
+      let ctx = canvas.getContext("2d");
+      ctx.font = "20px Roboto";
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillText(value, canvas.width / 2, canvas.height / 2);
+    };
+
+    const reloadCaptcha = (canvasId) => {
+      if (canvasId === "captcha") {
+        captchaNumber = Math.floor(1000 + Math.random() * 9000);
+        pushTextToCanvas(captchaNumber, canvasId);
+      }
+      if (canvasId === "captchaVerifyCertificate") {
+        captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+        pushTextToCanvas(captchaNumberVerifyCertificate, canvasId);
+      }
+    };
+
+    const checkMandatory = () => {
+      let systemIdValue = document.getElementById("systemId").value;
+      let phoneNumberValue = document.getElementById("phoneNumber").value;
+      if (systemIdValue && phoneNumberValue) {
+        $("#generateButton")[0].disabled = false;
+      } else {
+        $("#generateButton")[0].disabled = true;
+      }
+    };
+
+    const onChangeCaptchaTextBox = () => {
+      $("#captchaBox").css("border", "1px solid rgb(189, 189, 189)");
+      $("#captchaTextBox").css("border", "1px solid rgb(189, 189, 189)");
+    };
+
+    const onChangeCaptchaTextBoxVerifyCertificate = () => {
+      $("#captchaBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
+      $("#captchaTextBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
+    };
+
+    const submit = async () => {
+      let captchaValue = document.getElementById("captchaTextBox").value;
+      if (captchaValue === captchaNumber.toString()) {
+        const systemIdValue = document.getElementById("systemId").value;
+        const phoneNumberValue = document.getElementById("phoneNumber").value;
+        await generatePdf(systemIdValue, phoneNumberValue);
+      } else {
+        $("#captchaBox").css("border", "1px solid red");
+        $("#captchaTextBox").css("border", "1px solid red");
+      }
+    };
+
+    const submitVerifyCertificate = () => {
+      let captchaValue = document.getElementById("captchaTextBoxVerifyCertificate").value;
+      if (captchaValue === captchaNumberVerifyCertificate.toString()) {
+        alert("success");
+      } else {
+        $("#captchaBoxVerifyCertificate").css("border", "1px solid red");
+        $("#captchaTextBoxVerifyCertificate").css("border", "1px solid red");
+      }
+    };
+
+    async function generatePdf(systemIdValue, phoneNumberValue) {
+      const url = "./certificate.pdf";
+      const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const pages = pdfDoc.getPages();
+      let firstPage = pages[0];
+      const { width, height } = firstPage.getSize();
+      let check = true;
+      const result = await fetch(
+        `http://patoq7.ddns.net:8081/api/certificate?systemId=${systemIdValue}&phoneNo=${phoneNumberValue}`
+      )
+        .then((res) => res.json())
+        .catch(function () {
+          check = false;
+        });
+
+      if (check) {
+        //Run twice to make bold text
+        firstPage = drawTextforPDF(firstPage, result);
+        firstPage = drawTextforPDF(firstPage, result);
+
+        const qrImage = await pdfDoc.embedPng(result.qr);
+        firstPage.drawImage(qrImage, {
+          x: 412,
+          y: 562,
+          width: 130,
+          height: 130
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        var blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const docUrl = URL.createObjectURL(blob);
+        $("#certificate-pdf").attr("src", docUrl);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Person not found!",
+          text: "Wrong SystemID or Phone number or person haven't complete the vaccinations"
+        });
+      }
+    }
+
+    const drawTextforPDF = (firstPage, result) => {
+      firstPage.drawText(`${result.firstName} ${result.lastName}`, {
+        x: 72,
+        y: 460,
+        size: 12
+      });
+      firstPage.drawText(moment(`${result.dob}`).format("DD MMM YYYY"), {
+        x: 432,
+        y: 460,
+        size: 12
+      });
+      firstPage.drawText(result.sex, {
+        x: 72,
+        y: 410,
+        size: 12
+      });
+      firstPage.drawText(result.systemId, {
+        x: 433,
+        y: 410,
+        size: 12
+      });
+      firstPage.drawText(moment().format("DD MMM YYYY"), {
+        x: 72,
+        y: 362,
+        size: 12
+      });
+      let flag = 0;
+      result.vaccinations.forEach((dose) => {
+        firstPage.drawText(`${dose.doseNumber}`, {
+          x: 108,
+          y: flag === 0 ? 268 : 212,
+          size: 12
+        });
+        firstPage.drawText(dose.vaccineName, {
+          x: 200,
+          y: flag === 0 ? 280 : 224,
+          size: 12
+        });
+        firstPage.drawText(dose.batchNumber, {
+          x: 200,
+          y: flag === 0 ? 252 : 199,
+          size: 12
+        });
+        firstPage.drawText(moment(dose.vaccinationDate).format("DD MMM YYYY"), {
+          x: 330,
+          y: flag === 0 ? 268 : 212,
+          size: 12
+        });
+        firstPage.drawText(dose.vaccinationSite, {
+          x: 430,
+          y: flag === 0 ? 274 : 218,
+          size: 12,
+          maxWidth: 100,
+          lineHeight: 15
+        });
+        firstPage.drawText(dose.vaccinationSite, {
+          x: 430,
+          y: flag === 0 ? 274 : 218,
+          size: 12,
+          maxWidth: 100,
+          lineHeight: 15
+        });
+        flag++;
+      });
+      return firstPage;
+    };
+
+    init();
+  </script>
+</html>
