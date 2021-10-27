@@ -331,7 +331,7 @@
       const { width, height } = firstPage.getSize();
       let check = true;
       const result = await fetch(
-        `http://patoq7.ddns.net:8081/api/certificate?systemId=${systemIdValue}&phoneNo=${phoneNumberValue}`
+        `http://localhost:8080/api/certificate?systemId=${systemIdValue}&phoneNo=${phoneNumberValue}`
       )
         .then((res) => res.json())
         .catch(function () {
