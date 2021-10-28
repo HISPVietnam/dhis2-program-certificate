@@ -353,9 +353,8 @@
     const PageSizes = PDFLib.PageSizes;
     const degrees = PDFLib.degrees;
     let captchaNumber = Math.floor(1000 + Math.random() * 9000);
-    let captchaNumberVerifyCertificate = Math.floor(
-      1000 + Math.random() * 9000
-    );
+    let captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+    const certificateApiBaseUrl = "http://localhost:8080";
     const init = () => {
       //generateCertificate
       pushTextToCanvas(captchaNumber, "captcha");
@@ -517,7 +516,7 @@
       const { width, height } = firstPage.getSize();
       let check = true;
       const result = await fetch(
-        `http://localhost:8080/api/certificate?systemId=${systemIdValue}&phoneNo=${phoneNumberValue}`
+        `${certificateApiBaseUrl}/api/certificate?systemId=${systemIdValue}&phoneNo=${phoneNumberValue}`
       )
         .then((res) => res.json())
         .catch(function () {
