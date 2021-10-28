@@ -324,8 +324,6 @@
               id="generateButtonVerifyCertificate"
               type="button"
               class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#qrCodeModal"
               onclick="submitVerifyCertificate()"
             >
               SCAN
@@ -337,9 +335,6 @@
             </div>
             <div id="verifyResult" class="verify-result-box">
               <button class="verify-button" disabled>&#10003; VERIFIED</button>
-              <button class="not-verify-button" disabled id="notVerifyButton">
-                NOT VERIFIED
-              </button>
               <div style="padding-top: 20px; display: flex; align-self: center">
                 <b>Name:</b>&nbsp;&nbsp;
                 <p id="name">&nbsp;</p>
@@ -472,7 +467,7 @@
     const pushTextToCanvas = (value, canvasId) => {
       let canvas = document.getElementById(canvasId);
       let ctx = canvas.getContext("2d");
-      ctx.font = "20px Roboto";
+      ctx.font = "18px Roboto";
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -535,6 +530,7 @@
         "captchaTextBoxVerifyCertificate"
       ).value;
       if (captchaValue === captchaNumberVerifyCertificate.toString()) {
+        $("#qrCodeModal").modal("show");
         activedQrCode();
       } else {
         $("#qrCodeModal").modal("hide");
