@@ -25,6 +25,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     body {
       font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -119,6 +120,26 @@
       align-self: center;
     }
 
+    .not-verify-button {
+      background: grey;
+      background-image: -webkit-linear-gradient(top, grey, grey);
+      background-image: -moz-linear-gradient(top, grey, grey);
+      background-image: -ms-linear-gradient(top, grey, grey);
+      background-image: -o-linear-gradient(top, grey, grey);
+      background-image: linear-gradient(to bottom, grey, grey);
+      -webkit-border-radius: 10;
+      -moz-border-radius: 10;
+      border-radius: 10px;
+      border-color: grey;
+      font-family: Georgia;
+      color: black;
+      font-size: 15px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+      width: 30%;
+      align-self: center;
+    }
+
     .verify-table {
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
@@ -136,6 +157,18 @@
     .td-without-border-right {
       border-right: hidden !important;
       text-align: right !important;
+    }
+
+    .switch-camera-button {
+      background: url("./switchButton.png") left center no-repeat;
+      background-size: cover;
+      width: 40px;
+      height: 40px;
+      z-index: 9999;
+      top: 20px;
+      right: 40px;
+      position: absolute;
+      background-color: white;
     }
   </style>
   <body>
@@ -297,8 +330,14 @@
             </button>
           </div>
           <div class="verify-result-container">
+            <div id="notVerifyResult" class="verify-result-box">
+              <button class="not-verify-button" disabled>NOT VERIFIED</button>
+            </div>
             <div id="verifyResult" class="verify-result-box">
               <button class="verify-button" disabled>&#10003; VERIFIED</button>
+              <button class="not-verify-button" disabled id="notVerifyButton">
+                NOT VERIFIED
+              </button>
               <div style="padding-top: 20px; display: flex; align-self: center">
                 <b>Name:</b>&nbsp;&nbsp;
                 <p id="name">&nbsp;</p>
@@ -327,7 +366,9 @@
                     <td id="seriesNumber"></td>
                   </tr>
                   <tr>
-                    <td class="td-without-border-right"><b>Vaccination Date</b></td>
+                    <td class="td-without-border-right">
+                      <b>Vaccination Date</b>
+                    </td>
                     <td id="vaccinationDate"></td>
                   </tr>
                   <tr>
@@ -337,13 +378,61 @@
                     <td id="country"></td>
                   </tr>
                   <tr>
-                    <td class="td-without-border-right"><b>Certificate Issuer</b></td>
+                    <td class="td-without-border-right">
+                      <b>Certificate Issuer</b>
+                    </td>
                     <td id="certificateIssuer"></td>
                   </tr>
                 </table>
               </div>
             </div>
           </div>
+          <!-- / -->
+          <div
+            class="modal fade"
+            id="qrCodeModal"
+            tabindex="-1"
+            aria-labelledby="qrCodeModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content" style="width: 550px">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="qrCodeModalLabel">
+                    QR Code Scanner
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <input
+                      id="switchButton"
+                      type="button"
+                      class="switch-camera-button"
+                      value=""
+                      style="padding: 5px"
+                    />
+                  </div>
+                  <div style="width: 500px" id="reader"></div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / -->
         </div>
       </div>
     </div>
@@ -352,9 +441,19 @@
     const PDFDocument = PDFLib.PDFDocument;
     const PageSizes = PDFLib.PageSizes;
     const degrees = PDFLib.degrees;
+    var html5QrCode = new Html5Qrcode("reader");
+    var selectedDeviceIndex = 0;
+    var deviceText = "front";
     let captchaNumber = Math.floor(1000 + Math.random() * 9000);
-    let captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+    let captchaNumberVerifyCertificate = Math.floor(
+      1000 + Math.random() * 9000
+    );
+    //url for certificate
     const certificateApiBaseUrl = "http://localhost:8080";
+
+    //url for verify
+    const verifyApiBaseUrl = "http://localhost:3000";
+
     const init = () => {
       //generateCertificate
       pushTextToCanvas(captchaNumber, "captcha");
@@ -434,67 +533,7 @@
         "captchaTextBoxVerifyCertificate"
       ).value;
       if (captchaValue === captchaNumberVerifyCertificate.toString()) {
-
-        //dummy data
-        const result = {
-          status: "VERIFIED",
-          metadata: {
-            certificateIssuer: {
-              commonName: "Department Of Public Health",
-              countryName: "TL",
-            },
-          },
-          data: {
-            ver: "1.3.0",
-            nam: {
-              gn: "Hello FN",
-              gnt: "HELLO FN",
-              fn: "Hello SN",
-              fnt: "HELLO SN",
-            },
-            dob: "1996-10-16",
-            v: [
-              {
-                tg: "840539006",
-                vp: "1119305005",
-                mp: "ORG-100001699",
-                ma: "ORG-100001699",
-                dn: 2,
-                sd: 2,
-                dt: "2021-10-25",
-                co: "Republic of Vanuatu",
-                is: "Department of Public Health",
-                ci: "KZIM180331",
-              },
-            ],
-          },
-        };
-        //end dummy data
-
-        const data = result.data;
-        assignVerifyValue(
-          "name",
-          `${data.nam.gnt ? data.nam.gnt : ""} ${
-            data.nam.fnt ? data.nam.fnt : ""
-          }`
-        );
-        assignVerifyValue("dob", data.dob);
-        assignVerifyValue("identity", data.v.length > 0 ? data.v[0].ci : "");
-        assignVerifyValue("vaccineName", data.v.length > 0 ? data.v[0].mp : "");
-        assignVerifyValue(
-          "seriesNumber",
-          data.v.length > 0 ? data.v[0].dn : ""
-        );
-        assignVerifyValue(
-          "vaccinationDate",
-          data.v.length > 0 ? data.v[0].dt : ""
-        );
-        assignVerifyValue("country", data.v.length > 0 ? data.v[0].co : "");
-        assignVerifyValue(
-          "certificateIssuer",
-          data.v.length > 0 ? data.v[0].is : ""
-        );
-        $("#verifyResult").show();
+        activedQrCode();
       } else {
         $("#captchaBoxVerifyCertificate").css("border", "1px solid red");
         $("#captchaTextBoxVerifyCertificate").css("border", "1px solid red");
@@ -615,6 +654,107 @@
       });
       return firstPage;
     };
+
+    function activedQrCode(currentId) {
+      $("#switchButton").hide();
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          var cameraId;
+          if (devices && devices.length) {
+            cameraId = devices[0].id;
+            if (devices.length > 1) {
+              if (currentId) {
+                let findDevice = devices.find(
+                  (e) => !e.label.includes(deviceText)
+                );
+                deviceText = deviceText === "front" ? "back" : "front";
+                cameraId = findDevice.id;
+              }
+            }
+            html5QrCode
+              .start(
+                cameraId,
+                {
+                  fps: 10, // Optional, frame per seconds for qr code scanning
+                  qrbox: { width: 250, height: 250 }, // Optional, if you want bounded box UI
+                },
+                (decodedText, decodedResult) => {
+                  onScanSuccess(decodedText, decodedResult, html5QrCode);
+                },
+                (errorMessage) => {}
+              )
+              .then(() => {
+                if (devices.length > 1) {
+                  $("#switchButton").show();
+                  $("#switchButton").on("click", function () {
+                    html5QrCode
+                      .stop()
+                      .then((ignore) => {
+                        html5QrCode.clear();
+                        activedQrCode(cameraId);
+                      })
+                      .catch((err) => {});
+                  });
+                }
+              })
+              .catch((err) => {});
+          }
+        })
+        .catch((err) => {});
+    }
+
+    async function onScanSuccess(decodedText, decodedResult, html5QrCode) {
+      const result = await fetch(verifyApiBaseUrl, {
+        method: "POST",
+        body: decodedText,
+      }).then((res) => {
+        return res.json();
+      });
+      if (result.status === "VERIFIED") {
+        $("#notVerifyResult").hide();
+        fillInVerifyTable(result);
+      } else {
+        $("#verifyResult").hide();
+        $("#notVerifyResult").show();
+      }
+      $("#qrCodeModal").modal("hide");
+      $("#test").text(JSON.stringify(result));
+      html5QrCode
+        .stop()
+        .then((ignore) => {})
+        .catch((err) => {});
+    }
+
+    function fillInVerifyTable(result) {
+      const data = result.data;
+      let mappingVaccineName = {
+        "ORG-100001699": "AstraZeneca",
+        "ORG-100020693": "Sinopharm",
+      };
+      assignVerifyValue(
+        "name",
+        `${data.nam.gnt ? data.nam.gnt : ""} ${
+          data.nam.fnt ? data.nam.fnt : ""
+        }`
+      );
+      assignVerifyValue("dob", data.dob);
+      assignVerifyValue("identity", data.v.length > 0 ? data.v[0].ci : "");
+      assignVerifyValue(
+        "vaccineName",
+        data.v.length > 0 ? mappingVaccineName[data.v[0].mp] : ""
+      );
+      assignVerifyValue("seriesNumber", data.v.length > 0 ? data.v[0].dn : "");
+      assignVerifyValue(
+        "vaccinationDate",
+        data.v.length > 0 ? data.v[0].dt : ""
+      );
+      assignVerifyValue("country", data.v.length > 0 ? data.v[0].co : "");
+      assignVerifyValue(
+        "certificateIssuer",
+        data.v.length > 0 ? data.v[0].is : ""
+      );
+      $("#verifyResult").show();
+    }
 
     init();
   </script>
