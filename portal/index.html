@@ -321,9 +321,11 @@
           </div>
           <div class="button-generate-certificate">
             <button
+              id="generateButtonVerifyCertificate"
               type="button"
               class="btn btn-primary"
-              id="generateButtonVerifyCertificate"
+              data-bs-toggle="modal"
+              data-bs-target="#qrCodeModal"
               onclick="submitVerifyCertificate()"
             >
               SCAN
@@ -535,6 +537,7 @@
       if (captchaValue === captchaNumberVerifyCertificate.toString()) {
         activedQrCode();
       } else {
+        $("#qrCodeModal").modal("hide");
         $("#captchaBoxVerifyCertificate").css("border", "1px solid red");
         $("#captchaTextBoxVerifyCertificate").css("border", "1px solid red");
       }
