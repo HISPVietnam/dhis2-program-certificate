@@ -18,7 +18,7 @@ DHIS2 program certificate service is nodejs backend which allow DHIS2 developers
 
 ## Pre-request
 
-- working DHIS2 with version 2.3.8 or above (dhis2.org)
+- working DHIS2 with version 2.35.8 or above (https://dhis2.org)
 - working sign verification services (https://github.com/HISPVietnam/sign-verify-service)
 
 ## Setting up
