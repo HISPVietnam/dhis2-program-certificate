@@ -73,7 +73,7 @@
     }
 
     .verify-result-box {
-      width: auto;
+      width: 40%;
       border: 1px solid rgb(189, 189, 189);
       display: inline-flex;
       padding: 20px;
@@ -115,12 +115,38 @@
       font-size: 15px;
       padding: 10px 20px 10px 20px;
       text-decoration: none;
+      width: 30%;
+      align-self: center;
+    }
+
+    .verify-table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .verify-table td,
+    .verify-table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      width: 50%;
+    }
+
+    .td-without-border-right {
+      border-right: hidden !important;
+      text-align: right !important;
     }
   </style>
   <body>
     <div class="mainContainer">
       <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist" style="padding-left: 5px">
+        <div
+          class="nav nav-tabs"
+          id="nav-tab"
+          role="tablist"
+          style="padding-left: 5px"
+        >
           <button
             class="nav-link active"
             id="nav-generate-tab"
@@ -133,7 +159,7 @@
           >
             Generate Certificate
           </button>
-          <!-- <button
+          <button
             class="nav-link"
             id="nav-verify-tab"
             data-bs-toggle="tab"
@@ -144,11 +170,16 @@
             aria-selected="false"
           >
             Verify Certificate
-          </button> -->
+          </button>
         </div>
       </nav>
       <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-generate" role="tabpanel" aria-labelledby="nav-generate-tab">
+        <div
+          class="tab-pane fade show active"
+          id="nav-generate"
+          role="tabpanel"
+          aria-labelledby="nav-generate-tab"
+        >
           <h2 align="center">Generate Certificate</h2>
           <div class="input-field-generate-certificate-container">
             <div class="input-field-generate-certificate">
@@ -176,7 +207,10 @@
             <div class="captcha-container-box" id="captchaBox">
               <canvas id="captcha" width="100" height="25">captcha text</canvas>
               <div style="padding-bottom: 5px">
-                <a id="reloadCaptcha" onclick="reloadCaptcha('captcha')" style="cursor: pointer; color: blue"
+                <a
+                  id="reloadCaptcha"
+                  onclick="reloadCaptcha('captcha')"
+                  style="cursor: pointer; color: blue"
                   >Reload Captcha</a
                 >
               </div>
@@ -193,18 +227,45 @@
             </div>
           </div>
           <div class="button-generate-certificate">
-            <button type="button" class="btn btn-primary" id="generateButton" onclick="submit()">GENERATE</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="generateButton"
+              onclick="submit()"
+            >
+              GENERATE
+            </button>
           </div>
-          <div style="width: 100%; display: flex; align-items: center; justify-content: center">
-            <embed id="certificate-pdf" type="application/pdf" style="width: 1000px; height: 800px" />
+          <div
+            style="
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <embed
+              id="certificate-pdf"
+              type="application/pdf"
+              style="width: 1000px; height: 800px"
+            />
           </div>
         </div>
-        <!-- <div class="tab-pane fade" id="nav-verify" role="tabpanel" aria-labelledby="nav-verify-tab">
+        <div
+          class="tab-pane fade"
+          id="nav-verify"
+          role="tabpanel"
+          aria-labelledby="nav-verify-tab"
+        >
           <h2 align="center">Verify Certificate</h2>
-          <h5 align="center" style="padding-top: 25px">Scan Your Covid Certificate QR Code</h5>
+          <h5 align="center" style="padding-top: 25px">
+            Scan Your Covid Certificate QR Code
+          </h5>
           <div class="captcha-container">
             <div class="captcha-container-box" id="captchaBoxVerifyCertificate">
-              <canvas id="captchaVerifyCertificate" width="100" height="25">captcha text</canvas>
+              <canvas id="captchaVerifyCertificate" width="100" height="25"
+                >captcha text</canvas
+              >
               <div style="padding-bottom: 5px">
                 <a
                   id="reloadCaptchaVerifyCertificate"
@@ -237,10 +298,53 @@
           </div>
           <div class="verify-result-container">
             <div id="verifyResult" class="verify-result-box">
-              <button class="verify-button">&#10003; VERIFIED</button>
+              <button class="verify-button" disabled>&#10003; VERIFIED</button>
+              <div style="padding-top: 20px; display: flex; align-self: center">
+                <b>Name:</b>&nbsp;&nbsp;
+                <p id="name">&nbsp;</p>
+              </div>
+              <div style="padding-top: 10px; display: flex; align-self: center">
+                <b>Date of Birth:</b>&nbsp;&nbsp;
+                <p id="dob">&nbsp;</p>
+              </div>
+              <div style="padding-top: 10px; display: flex; align-self: center">
+                <b>Unique certificate identifier:</b>&nbsp;&nbsp;
+                <p id="identity">&nbsp;</p>
+              </div>
+              <div style="padding-top: 10px; text-align: center">
+                <b>Vaccination</b>
+              </div>
+              <div style="padding-top: 10px; text-align: center">
+                <table class="verify-table">
+                  <tr>
+                    <td class="td-without-border-right"><b>Vaccine Name</b></td>
+                    <td id="vaccineName"></td>
+                  </tr>
+                  <tr>
+                    <td class="td-without-border-right">
+                      <b>Number in a series of dose</b>
+                    </td>
+                    <td id="seriesNumber"></td>
+                  </tr>
+                  <tr>
+                    <td class="td-without-border-right"><b>Vaccination Date</b></td>
+                    <td id="vaccinationDate"></td>
+                  </tr>
+                  <tr>
+                    <td class="td-without-border-right">
+                      <b>Country of Vaccination</b>
+                    </td>
+                    <td id="country"></td>
+                  </tr>
+                  <tr>
+                    <td class="td-without-border-right"><b>Certificate Issuer</b></td>
+                    <td id="certificateIssuer"></td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </body>
@@ -249,14 +353,20 @@
     const PageSizes = PDFLib.PageSizes;
     const degrees = PDFLib.degrees;
     let captchaNumber = Math.floor(1000 + Math.random() * 9000);
-    let captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+    let captchaNumberVerifyCertificate = Math.floor(
+      1000 + Math.random() * 9000
+    );
     const init = () => {
       //generateCertificate
       pushTextToCanvas(captchaNumber, "captcha");
       $("#generateButton")[0].disabled = true;
       //verifyCertificate
-      //pushTextToCanvas(captchaNumberVerifyCertificate, "captchaVerifyCertificate");
-      //$("#generateButtonVerifyCertificate")[0].disabled = true;
+      pushTextToCanvas(
+        captchaNumberVerifyCertificate,
+        "captchaVerifyCertificate"
+      );
+      $("#verifyResult").hide();
+      // $("#generateButtonVerifyCertificate")[0].disabled = true;
     };
 
     const pushTextToCanvas = (value, canvasId) => {
@@ -275,7 +385,9 @@
         pushTextToCanvas(captchaNumber, canvasId);
       }
       if (canvasId === "captchaVerifyCertificate") {
-        captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
+        captchaNumberVerifyCertificate = Math.floor(
+          1000 + Math.random() * 9000
+        );
         pushTextToCanvas(captchaNumberVerifyCertificate, canvasId);
       }
     };
@@ -296,8 +408,14 @@
     };
 
     const onChangeCaptchaTextBoxVerifyCertificate = () => {
-      $("#captchaBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
-      $("#captchaTextBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
+      $("#captchaBoxVerifyCertificate").css(
+        "border",
+        "1px solid rgb(189, 189, 189)"
+      );
+      $("#captchaTextBoxVerifyCertificate").css(
+        "border",
+        "1px solid rgb(189, 189, 189)"
+      );
     };
 
     const submit = async () => {
@@ -313,18 +431,86 @@
     };
 
     const submitVerifyCertificate = () => {
-      let captchaValue = document.getElementById("captchaTextBoxVerifyCertificate").value;
+      let captchaValue = document.getElementById(
+        "captchaTextBoxVerifyCertificate"
+      ).value;
       if (captchaValue === captchaNumberVerifyCertificate.toString()) {
-        alert("success");
+
+        //dummy data
+        const result = {
+          status: "VERIFIED",
+          metadata: {
+            certificateIssuer: {
+              commonName: "Department Of Public Health",
+              countryName: "TL",
+            },
+          },
+          data: {
+            ver: "1.3.0",
+            nam: {
+              gn: "Hello FN",
+              gnt: "HELLO FN",
+              fn: "Hello SN",
+              fnt: "HELLO SN",
+            },
+            dob: "1996-10-16",
+            v: [
+              {
+                tg: "840539006",
+                vp: "1119305005",
+                mp: "ORG-100001699",
+                ma: "ORG-100001699",
+                dn: 2,
+                sd: 2,
+                dt: "2021-10-25",
+                co: "Republic of Vanuatu",
+                is: "Department of Public Health",
+                ci: "KZIM180331",
+              },
+            ],
+          },
+        };
+        //end dummy data
+
+        const data = result.data;
+        assignVerifyValue(
+          "name",
+          `${data.nam.gnt ? data.nam.gnt : ""} ${
+            data.nam.fnt ? data.nam.fnt : ""
+          }`
+        );
+        assignVerifyValue("dob", data.dob);
+        assignVerifyValue("identity", data.v.length > 0 ? data.v[0].ci : "");
+        assignVerifyValue("vaccineName", data.v.length > 0 ? data.v[0].mp : "");
+        assignVerifyValue(
+          "seriesNumber",
+          data.v.length > 0 ? data.v[0].dn : ""
+        );
+        assignVerifyValue(
+          "vaccinationDate",
+          data.v.length > 0 ? data.v[0].dt : ""
+        );
+        assignVerifyValue("country", data.v.length > 0 ? data.v[0].co : "");
+        assignVerifyValue(
+          "certificateIssuer",
+          data.v.length > 0 ? data.v[0].is : ""
+        );
+        $("#verifyResult").show();
       } else {
         $("#captchaBoxVerifyCertificate").css("border", "1px solid red");
         $("#captchaTextBoxVerifyCertificate").css("border", "1px solid red");
       }
     };
 
+    const assignVerifyValue = (id, value) => {
+      $(`#${id}`).text(value ? value : "&nbsp;");
+    };
+
     async function generatePdf(systemIdValue, phoneNumberValue) {
       const url = "./certificate.pdf";
-      const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
+      const existingPdfBytes = await fetch(url).then((res) =>
+        res.arrayBuffer()
+      );
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const pages = pdfDoc.getPages();
       let firstPage = pages[0];
@@ -348,7 +534,7 @@
           x: 412,
           y: 562,
           width: 130,
-          height: 130
+          height: 130,
         });
 
         const pdfBytes = await pdfDoc.save();
@@ -359,7 +545,7 @@
         swal({
           icon: "error",
           title: "Person not found!",
-          text: "Wrong SystemID or Phone number or person haven't complete the vaccinations"
+          text: "Wrong SystemID or Phone number or person haven't complete the vaccinations",
         });
       }
     }
@@ -368,63 +554,63 @@
       firstPage.drawText(`${result.firstName} ${result.lastName}`, {
         x: 72,
         y: 460,
-        size: 12
+        size: 12,
       });
       firstPage.drawText(moment(`${result.dob}`).format("DD MMM YYYY"), {
         x: 432,
         y: 460,
-        size: 12
+        size: 12,
       });
       firstPage.drawText(result.sex, {
         x: 72,
         y: 410,
-        size: 12
+        size: 12,
       });
       firstPage.drawText(result.systemId, {
         x: 433,
         y: 410,
-        size: 12
+        size: 12,
       });
       firstPage.drawText(moment().format("DD MMM YYYY"), {
         x: 72,
         y: 362,
-        size: 12
+        size: 12,
       });
       let flag = 0;
       result.vaccinations.forEach((dose) => {
         firstPage.drawText(`${dose.doseNumber}`, {
           x: 108,
           y: flag === 0 ? 268 : 212,
-          size: 12
+          size: 12,
         });
         firstPage.drawText(dose.vaccineName, {
           x: 200,
           y: flag === 0 ? 280 : 224,
-          size: 12
+          size: 12,
         });
         firstPage.drawText(dose.batchNumber, {
           x: 200,
           y: flag === 0 ? 252 : 199,
-          size: 12
+          size: 12,
         });
         firstPage.drawText(moment(dose.vaccinationDate).format("DD MMM YYYY"), {
           x: 330,
           y: flag === 0 ? 268 : 212,
-          size: 12
+          size: 12,
         });
         firstPage.drawText(dose.vaccinationSite, {
           x: 430,
           y: flag === 0 ? 274 : 218,
           size: 12,
           maxWidth: 100,
-          lineHeight: 15
+          lineHeight: 15,
         });
         firstPage.drawText(dose.vaccinationSite, {
           x: 430,
           y: flag === 0 ? 274 : 218,
           size: 12,
           maxWidth: 100,
-          lineHeight: 15
+          lineHeight: 15,
         });
         flag++;
       });
