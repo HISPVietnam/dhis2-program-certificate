@@ -8,6 +8,7 @@ DHIS2 program certificate service is nodejs backend which allow DHIS2 developers
 - Public can generate their own vaccination certificate with QR code
 - Public can verify Vaccination certifcate 
 
+![Workflow](./workflow.png)
 
 ## What's inside this example?
 
