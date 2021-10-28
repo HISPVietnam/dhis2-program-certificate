@@ -2,7 +2,8 @@
 
 ## Overview
 DHIS2 program certificate service is nodejs backend which allow DHIS2 developers to configure QR code based certificate for their health programs in DHIS2. D2PC service works as an external additional module align with DHIS2 and QR code service. It combine data from DHIS2 and QR code service so that person health certificate can be configured based on county or health program templates. The follow code is an example for generating Covid Vaccination certificate based on DHIS2 data and EU Digital Covid Certificate schema for QR code.
-Features:
+
+## Features:
 - Health Worker can login to DHIS2 and generate Vaccination certificate without modifying DHIS2 core
 - Public can generate their own vaccination certificate with QR code
 - Public can verify Vaccination certifcate 
