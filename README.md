@@ -13,9 +13,13 @@ DHIS2 program certificate service is nodejs backend which allow DHIS2 developers
 ## What's inside this example?
 
 - Customized backend for talking with DHIS2
-- Simple public portal for certificate generation
-- QRCode service
+- Simple public portal for certificate generation and Verfication
 - One database backup for example DHIS2 instance with covid19 vaccination package installed
+
+## Pre-request
+
+- working DHIS2 with version 2.3.8 or above (dhis2.org)
+- working sign verification services (https://github.com/HISPVietnam/sign-verify-service)
 
 ## Setting up
 
