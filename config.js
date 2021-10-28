@@ -1,7 +1,7 @@
 const dhis2 = {
   baseUrl: "http://localhost",
-  username: "admin",
-  password: "district"
+  username: "",
+  password: ""
 };
 
 const svs = {
