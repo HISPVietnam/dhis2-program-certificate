@@ -20,8 +20,8 @@ DHIS2 program certificate service is nodejs backend which allow DHIS2 developers
 
 ## Pre-request
 
-- working DHIS2 with version 2.35.8 or above (https://dhis2.org)
-- working sign verification services (https://github.com/HISPVietnam/sign-verify-service)
+- Working DHIS2 with version 2.35.8 or above (https://dhis2.org)
+- Working sign verification service (https://github.com/HISPVietnam/sign-verify-service)
 
 ## Setting up
 
@@ -45,6 +45,14 @@ DHIS2 program certificate service is nodejs backend which allow DHIS2 developers
   - Click `GENERATE CERTIFICATE` button
 - **Generate certificate using public portal**
   - Go to public portal `http://localhost:8080`
+  - Select Generate certificate tab
   - Input SystemID and Phone number
   - Input the captcha
   - Click `GENERATE` button
+- **Verify QRCode using public portal**
+  - Go to public portal `http://localhost:8080` using a device with camera
+  - Select Verification tab
+  - Input the captcha
+  - Click `SCAN` button
+  - Scan the QRCode using integrated scanner
+  - **IMPORTANT!!**: Verification functionality works only with HTTPS
