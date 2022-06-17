@@ -174,12 +174,7 @@
   <body>
     <div class="mainContainer">
       <nav>
-        <div
-          class="nav nav-tabs"
-          id="nav-tab"
-          role="tablist"
-          style="padding-left: 5px"
-        >
+        <div class="nav nav-tabs" id="nav-tab" role="tablist" style="padding-left: 5px">
           <button
             class="nav-link active"
             id="nav-generate-tab"
@@ -207,12 +202,7 @@
         </div>
       </nav>
       <div class="tab-content" id="nav-tabContent">
-        <div
-          class="tab-pane fade show active"
-          id="nav-generate"
-          role="tabpanel"
-          aria-labelledby="nav-generate-tab"
-        >
+        <div class="tab-pane fade show active" id="nav-generate" role="tabpanel" aria-labelledby="nav-generate-tab">
           <h2 align="center">Generate Certificate</h2>
           <div class="input-field-generate-certificate-container">
             <div class="input-field-generate-certificate">
@@ -240,10 +230,7 @@
             <div class="captcha-container-box" id="captchaBox">
               <canvas id="captcha" width="100" height="25">captcha text</canvas>
               <div style="padding-bottom: 5px">
-                <a
-                  id="reloadCaptcha"
-                  onclick="reloadCaptcha('captcha')"
-                  style="cursor: pointer; color: blue"
+                <a id="reloadCaptcha" onclick="reloadCaptcha('captcha')" style="cursor: pointer; color: blue"
                   >Reload Captcha</a
                 >
               </div>
@@ -260,45 +247,18 @@
             </div>
           </div>
           <div class="button-generate-certificate">
-            <button
-              type="button"
-              class="btn btn-primary"
-              id="generateButton"
-              onclick="submit()"
-            >
-              GENERATE
-            </button>
+            <button type="button" class="btn btn-primary" id="generateButton" onclick="submit()">GENERATE</button>
           </div>
-          <div
-            style="
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            <embed
-              id="certificate-pdf"
-              type="application/pdf"
-              style="width: 1000px; height: 800px"
-            />
+          <div style="width: 100%; display: flex; align-items: center; justify-content: center">
+            <embed id="certificate-pdf" type="application/pdf" style="width: 1000px; height: 800px" />
           </div>
         </div>
-        <div
-          class="tab-pane fade"
-          id="nav-verify"
-          role="tabpanel"
-          aria-labelledby="nav-verify-tab"
-        >
+        <div class="tab-pane fade" id="nav-verify" role="tabpanel" aria-labelledby="nav-verify-tab">
           <h2 align="center">Verify Certificate</h2>
-          <h5 align="center" style="padding-top: 25px">
-            Scan Your Covid Certificate QR Code
-          </h5>
+          <h5 align="center" style="padding-top: 25px">Scan Your Covid Certificate QR Code</h5>
           <div class="captcha-container">
             <div class="captcha-container-box" id="captchaBoxVerifyCertificate">
-              <canvas id="captchaVerifyCertificate" width="100" height="25"
-                >captcha text</canvas
-              >
+              <canvas id="captchaVerifyCertificate" width="100" height="25">captcha text</canvas>
               <div style="padding-bottom: 5px">
                 <a
                   id="reloadCaptchaVerifyCertificate"
@@ -385,46 +345,21 @@
             </div>
           </div>
           <!-- / -->
-          <div
-            class="modal fade"
-            id="qrCodeModal"
-            tabindex="-1"
-            aria-labelledby="qrCodeModalLabel"
-            aria-hidden="true"
-          >
+          <div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content" style="width: 550px">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="qrCodeModalLabel">
-                    QR Code Scanner
-                  </h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+                  <h5 class="modal-title" id="qrCodeModalLabel">QR Code Scanner</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <div>
-                    <input
-                      id="switchButton"
-                      type="button"
-                      class="switch-camera-button"
-                      value=""
-                      style="padding: 5px"
-                    />
+                    <input id="switchButton" type="button" class="switch-camera-button" value="" style="padding: 5px" />
                   </div>
                   <div style="width: 500px" id="reader"></div>
                 </div>
                 <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>
@@ -442,9 +377,7 @@
     var selectedDeviceIndex = 0;
     var deviceText = "front";
     let captchaNumber = Math.floor(1000 + Math.random() * 9000);
-    let captchaNumberVerifyCertificate = Math.floor(
-      1000 + Math.random() * 9000
-    );
+    let captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
     //url for certificate
     const certificateApiBaseUrl = "http://localhost:8080";
 
@@ -456,10 +389,7 @@
       pushTextToCanvas(captchaNumber, "captcha");
       $("#generateButton")[0].disabled = true;
       //verifyCertificate
-      pushTextToCanvas(
-        captchaNumberVerifyCertificate,
-        "captchaVerifyCertificate"
-      );
+      pushTextToCanvas(captchaNumberVerifyCertificate, "captchaVerifyCertificate");
       $("#verifyResult").hide();
       // $("#generateButtonVerifyCertificate")[0].disabled = true;
     };
@@ -480,9 +410,7 @@
         pushTextToCanvas(captchaNumber, canvasId);
       }
       if (canvasId === "captchaVerifyCertificate") {
-        captchaNumberVerifyCertificate = Math.floor(
-          1000 + Math.random() * 9000
-        );
+        captchaNumberVerifyCertificate = Math.floor(1000 + Math.random() * 9000);
         pushTextToCanvas(captchaNumberVerifyCertificate, canvasId);
       }
     };
@@ -503,14 +431,8 @@
     };
 
     const onChangeCaptchaTextBoxVerifyCertificate = () => {
-      $("#captchaBoxVerifyCertificate").css(
-        "border",
-        "1px solid rgb(189, 189, 189)"
-      );
-      $("#captchaTextBoxVerifyCertificate").css(
-        "border",
-        "1px solid rgb(189, 189, 189)"
-      );
+      $("#captchaBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
+      $("#captchaTextBoxVerifyCertificate").css("border", "1px solid rgb(189, 189, 189)");
     };
 
     const submit = async () => {
@@ -526,9 +448,7 @@
     };
 
     const submitVerifyCertificate = () => {
-      let captchaValue = document.getElementById(
-        "captchaTextBoxVerifyCertificate"
-      ).value;
+      let captchaValue = document.getElementById("captchaTextBoxVerifyCertificate").value;
       if (captchaValue === captchaNumberVerifyCertificate.toString()) {
         $("#qrCodeModal").modal("show");
         activedQrCode();
@@ -545,9 +465,7 @@
 
     async function generatePdf(systemIdValue, phoneNumberValue) {
       const url = "./certificate.pdf";
-      const existingPdfBytes = await fetch(url).then((res) =>
-        res.arrayBuffer()
-      );
+      const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const pages = pdfDoc.getPages();
       let firstPage = pages[0];
@@ -571,7 +489,7 @@
           x: 412,
           y: 562,
           width: 130,
-          height: 130,
+          height: 130
         });
 
         const pdfBytes = await pdfDoc.save();
@@ -582,7 +500,7 @@
         swal({
           icon: "error",
           title: "Person not found!",
-          text: "Wrong SystemID or Phone number or person haven't complete the vaccinations",
+          text: "Wrong SystemID or Phone number or person haven't complete the vaccinations"
         });
       }
     }
@@ -591,63 +509,63 @@
       firstPage.drawText(`${result.firstName} ${result.lastName}`, {
         x: 72,
         y: 460,
-        size: 12,
+        size: 12
       });
       firstPage.drawText(moment(`${result.dob}`).format("DD MMM YYYY"), {
         x: 432,
         y: 460,
-        size: 12,
+        size: 12
       });
       firstPage.drawText(result.sex, {
         x: 72,
         y: 410,
-        size: 12,
+        size: 12
       });
       firstPage.drawText(result.systemId, {
         x: 433,
         y: 410,
-        size: 12,
+        size: 12
       });
       firstPage.drawText(moment().format("DD MMM YYYY"), {
         x: 72,
         y: 362,
-        size: 12,
+        size: 12
       });
       let flag = 0;
       result.vaccinations.forEach((dose) => {
         firstPage.drawText(`${dose.doseNumber}`, {
           x: 108,
           y: flag === 0 ? 268 : 212,
-          size: 12,
+          size: 12
         });
         firstPage.drawText(dose.vaccineName, {
           x: 200,
           y: flag === 0 ? 280 : 224,
-          size: 12,
+          size: 12
         });
         firstPage.drawText(dose.batchNumber, {
           x: 200,
           y: flag === 0 ? 252 : 199,
-          size: 12,
+          size: 12
         });
         firstPage.drawText(moment(dose.vaccinationDate).format("DD MMM YYYY"), {
           x: 330,
           y: flag === 0 ? 268 : 212,
-          size: 12,
+          size: 12
         });
         firstPage.drawText(dose.vaccinationSite, {
           x: 430,
           y: flag === 0 ? 274 : 218,
           size: 12,
           maxWidth: 100,
-          lineHeight: 15,
+          lineHeight: 15
         });
         firstPage.drawText(dose.vaccinationSite, {
           x: 430,
           y: flag === 0 ? 274 : 218,
           size: 12,
           maxWidth: 100,
-          lineHeight: 15,
+          lineHeight: 15
         });
         flag++;
       });
@@ -660,13 +578,11 @@
         .then((devices) => {
           var cameraId;
           if (devices && devices.length) {
-            cameraId = devices[0].id;
+            cameraId = devices[1] ? devices[1].id : devices[0].id;
             if (devices.length > 1) {
               if (currentId) {
-                let findDevice = devices.find(
-                  (e) => !e.label.includes(deviceText)
-                );
-                deviceText = deviceText === "front" ? "back" : "front";
+                let findDevice = devices.find((e) => !e.label.includes(deviceText));
+                deviceText = deviceText.includes("front") ? "back" : "front";
                 cameraId = findDevice.id;
               }
             }
@@ -675,7 +591,7 @@
                 cameraId,
                 {
                   fps: 10, // Optional, frame per seconds for qr code scanning
-                  qrbox: { width: 250, height: 250 }, // Optional, if you want bounded box UI
+                  qrbox: { width: 250, height: 250 } // Optional, if you want bounded box UI
                 },
                 (decodedText, decodedResult) => {
                   onScanSuccess(decodedText, decodedResult, html5QrCode);
@@ -705,7 +621,7 @@
     async function onScanSuccess(decodedText, decodedResult, html5QrCode) {
       const result = await fetch(verifyApiBaseUrl, {
         method: "POST",
-        body: decodedText,
+        body: decodedText
       }).then((res) => {
         return res.json();
       });
@@ -728,30 +644,16 @@
       const data = result.data;
       let mappingVaccineName = {
         "ORG-100001699": "AstraZeneca",
-        "ORG-100020693": "Sinopharm",
+        "ORG-100020693": "Sinopharm"
       };
-      assignVerifyValue(
-        "name",
-        `${data.nam.gnt ? data.nam.gnt : ""} ${
-          data.nam.fnt ? data.nam.fnt : ""
-        }`
-      );
+      assignVerifyValue("name", `${data.nam.gnt ? data.nam.gnt : ""} ${data.nam.fnt ? data.nam.fnt : ""}`);
       assignVerifyValue("dob", data.dob);
       assignVerifyValue("identity", data.v.length > 0 ? data.v[0].ci : "");
-      assignVerifyValue(
-        "vaccineName",
-        data.v.length > 0 ? mappingVaccineName[data.v[0].mp] : ""
-      );
+      assignVerifyValue("vaccineName", data.v.length > 0 ? mappingVaccineName[data.v[0].mp] : "");
       assignVerifyValue("seriesNumber", data.v.length > 0 ? data.v[0].dn : "");
-      assignVerifyValue(
-        "vaccinationDate",
-        data.v.length > 0 ? data.v[0].dt : ""
-      );
+      assignVerifyValue("vaccinationDate", data.v.length > 0 ? data.v[0].dt : "");
       assignVerifyValue("country", data.v.length > 0 ? data.v[0].co : "");
-      assignVerifyValue(
-        "certificateIssuer",
-        data.v.length > 0 ? data.v[0].is : ""
-      );
+      assignVerifyValue("certificateIssuer", data.v.length > 0 ? data.v[0].is : "");
       $("#verifyResult").show();
     }
 
